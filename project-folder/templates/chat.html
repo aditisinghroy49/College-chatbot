@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Chat with CollegeBot{% endblock %}
+
+{% block content %}
+    <h1>Chat with the Bot</h1>
+    <div id="chat-box" class="border p-3 mb-3" style="height: 300px; overflow-y: auto;">
+        <!-- Chat messages will appear here -->
+    </div>
+
+    <form id="chat-form" method="POST" action="{{ url_for('chat') }}">
+        <div class="form-group">
+            <input type="text" id="user-input" name="user_input" class="form-control" placeholder="Type your message here...">
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+
+    <script>
+        // Basic JavaScript to auto-scroll chat-box and clear input after sending
+        document.getElementById("chat-form").onsubmit = function(e) {
+            e.preventDefault();
+            
+            let input = document.getElementById("user-input").value;
+            let chatBox = document.getElementById("chat-box");
+
+            // Append user input to chat-box
+            let userMessage = document.createElement("div");
+            userMessage.innerHTML = "<strong>You:</strong> " + input;
+            chatBox.appendChild(userMessage);
+
+            // Send AJAX request to server
+            fetch("{{ url_for('chat') }}", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_input: input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let botMessage = document.createElement("div");
+                botMessage.innerHTML = "<strong>Bot:</strong> " + data.response;
+                chatBox.appendChild(botMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            });
+
+            document.getElementById("user-input").value = ""; // Clear input field
+        }
+    </script>
+{% endblock %}
+

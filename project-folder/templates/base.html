@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CollegeBot{% endblock %}</title>
+
+    <!-- Link to external CSS (style.css) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation bar or other page header (if needed) -->
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('chat') }}">Chat with Bot</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content area where child templates will be injected -->
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+
+    </div>
+
+    <!-- Link to external JavaScript (script.js) -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
